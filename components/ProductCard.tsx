@@ -10,7 +10,6 @@ type Props = {
 
 function ProductCard({ product, currentUser, email }: Props) {
   const { data } = useSession();
-
   return (
     <div className="flex flex-col gap-3 shadow-md rounded-lg border border-gray-200 items-center p-2">
       <Image
@@ -31,7 +30,7 @@ function ProductCard({ product, currentUser, email }: Props) {
         </div>
       ) : (
         <div className="flex flex-col gap-2">
-          {currentUser.role === "admin" && (
+          {data?.user?.email === "admin@gmail.com" && (
             <div className="flex items-center justify-between gap-2">
               <button className="submit-btn bg-green-600 text-white">
                 Edit
