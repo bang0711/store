@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useState } from "react";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 type Props = {
   user: any;
 };
@@ -34,7 +35,10 @@ function UserCard({ user }: Props) {
     router.refresh();
   };
   return (
-    <div className="flex flex-col shadow-md border border-gray-200 p-3 rounded-lg gap-1 font-semibold items-center">
+    <Link
+      href={`/shop/${user.email}`}
+      className="flex flex-col shadow-md border border-gray-200 p-3 rounded-lg gap-1 font-semibold items-center"
+    >
       {user?.userImage === "" ? (
         <div className="flex flex-col gap-3 items-center">
           <svg
@@ -94,7 +98,7 @@ function UserCard({ user }: Props) {
           "Delete"
         )}
       </button>
-    </div>
+    </Link>
   );
 }
 

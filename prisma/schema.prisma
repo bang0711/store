@@ -84,7 +84,13 @@ model Product {
   productImage String
   User         User?    @relation(fields: [userId], references: [id])
   userId       String?
-  shopEmail    String?  @unique
+  category     Category
+}
+
+enum Category {
+  Fashion
+  Technology
+  Beauty
 }
 
 model VendorRequest {
