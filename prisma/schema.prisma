@@ -1,0 +1,106 @@
+datasource db {
+  provider          = "postgresql"
+  url               = env("DATABASE_URL")
+  shadowDatabaseUrl = env("SHADOW_DATABASE_URL") // Only needed when using a cloud provider that doesn't support the creation of new databases, like Heroku. Learn more: https://pris.ly/d/migrate-shadow
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model User {
+  id             String          @id @default(cuid())
+  username       String
+  email          String?         @unique
+  emailVerified  DateTime?
+  image          String?
+  role           String
+  hashedPassword String
+  address        String?
+  phoneNumber    String?
+  active         Boolean         @default(false)
+  crated_at      DateTime        @default(now())
+  updated_at     DateTime        @updatedAt
+  accounts       Account[]
+  sessions       Session[]
+  products       Product[]
+  activateTokens ActivateToken[]
+  vendorrequests VendorRequest[]
+}
+
+model ActivateToken {
+  id           String    @id @default(cuid())
+  token        String    @unique
+  activated_at DateTime?
+  created_at   DateTime  @default(now())
+  updated_at   DateTime  @updatedAt
+  User         User?     @relation(fields: [userId], references: [id])
+  userId       String?
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+model Product {
+  id            String         @id @default(cuid())
+  productName   String
+  productPrice  String
+  created_at    DateTime       @default(now())
+  upadted_at    DateTime       @updatedAt
+  productImages ProductImage[]
+  User          User?          @relation(fields: [userId], references: [id])
+  userId        String?
+}
+
+model ProductImage {
+  id        String   @id @default(cuid())
+  imageUrl  String
+  imageName String
+  Product   Product? @relation(fields: [productId], references: [id])
+  productId String?
+}
+
+model VendorRequest {
+  id                 String   @id @default(cuid())
+  created_at         DateTime @default(now())
+  update_at          DateTime @updatedAt
+  User               User?    @relation(fields: [userId], references: [id])
+  userId             String?
+  companyName        String?  @unique
+  companyImage       String?
+  companyEmail       String?  @unique
+  companyPhoneNumber String?
+  CompanyAddress     String?
+}

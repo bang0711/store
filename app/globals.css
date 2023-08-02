@@ -2,26 +2,36 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
+@layer components {
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus,
+  input:-webkit-autofill:active {
+    transition: background-color 10000s;
+    -webkit-text-fill-color: black !important;
   }
-}
-
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+  .form > div {
+    @apply flex flex-col gap-2 font-medium;
+  }
+  form {
+    @apply flex flex-col gap-3 p-3 shadow-md rounded-lg border border-gray-200 form w-full md:w-[80%] lg:w-[50%];
+  }
+  input {
+    @apply p-3 rounded-lg border border-gray-200 focus-within:shadow-md transition-all duration-300 outline-none;
+  }
+  a {
+    @apply shadow-md rounded-lg py-1 px-3 text-black;
+  }
+  button {
+    @apply shadow-md rounded-lg py-1 px-3 text-black;
+  }
+  .div {
+    @apply min-h-[90vh] flex items-center justify-center;
+  }
+  .title {
+    @apply text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-5;
+  }
+  .submit-btn {
+    @apply w-20 h-10 mx-auto flex items-center justify-center disabled:cursor-not-allowed;
+  }
 }
