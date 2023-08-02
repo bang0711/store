@@ -1,16 +1,20 @@
+"use client";
 import Link from "next/link";
 import React from "react";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { useSession } from "next-auth/react";
 type Props = {};
-async function Navbar({}: Props) {
-  const session = await getServerSession(authOptions);
-
+function Navbar({}: Props) {
+  const { data, status } = useSession();
+  console.log(data, status);
   return (
     <header className="sticky top-0 shadow-md p-3 backdrop-blur-md bg-white/50 z-50">
       <nav className="flex items-center justify-between gap-3">
         <Link href={"/"}>Home</Link>
-        {session ? (
+        {data && status === "authenticated" ? (
+          <div className="flex items-center gap-3">
+            <Link href={"/dashboard"}>Dashboard</Link>
+          </div>
+        ) : !data && status === "loading" ? (
           <div className="flex items-center gap-3">
             <Link href={"/dashboard"}>Dashboard</Link>
           </div>

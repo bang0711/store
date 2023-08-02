@@ -3,9 +3,7 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 export async function POST(req: Request) {
   const body = await req.json();
-  console.log(body);
-  const { companyEmail, companyImage } = body;
-  console.log(companyEmail);
+  const { companyEmail } = body;
 
   const newUser = await prisma.user.update({
     where: {
@@ -13,7 +11,6 @@ export async function POST(req: Request) {
     },
     data: {
       role: "vendor",
-      image: companyImage,
     },
   });
 
