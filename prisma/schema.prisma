@@ -53,6 +53,7 @@ model User {
   products       Product[]
   activateTokens ActivateToken[]
   vendorrequests VendorRequest[]
+  userImages     UserImage[]
 }
 
 model ActivateToken {
@@ -90,6 +91,14 @@ model ProductImage {
   imageName String
   Product   Product? @relation(fields: [productId], references: [id])
   productId String?
+}
+
+model UserImage {
+  id        String  @id @default(cuid())
+  imageUrl  String
+  userEmail String  @unique
+  User      User?   @relation(fields: [userId], references: [id])
+  userId    String?
 }
 
 model VendorRequest {

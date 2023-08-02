@@ -2,11 +2,9 @@
 import React from "react";
 import { useState } from "react";
 import { toast } from "react-toastify";
-
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 type Props = {};
-
 function RegisterForm({}: Props) {
   const [data, setData] = useState({
     email: "",
@@ -57,8 +55,8 @@ function RegisterForm({}: Props) {
           name="username"
           id="username"
           value={data.username}
-          placeholder="Enter your username"
           onChange={(e) => setData({ ...data, username: e.target.value })}
+          placeholder="Enter your username"
         />
       </div>
       <div>
@@ -98,7 +96,6 @@ function RegisterForm({}: Props) {
           "Register"
         )}
       </button>
-
       <p className="flex items-center justify-center">
         Already have an account?{" "}
         <Link

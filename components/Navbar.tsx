@@ -5,7 +5,7 @@ import { useSession } from "next-auth/react";
 type Props = {};
 function Navbar({}: Props) {
   const { data, status } = useSession();
-  console.log(data, status);
+
   return (
     <header className="sticky top-0 shadow-md p-3 backdrop-blur-md bg-white/50 z-50">
       <nav className="flex items-center justify-between gap-3">

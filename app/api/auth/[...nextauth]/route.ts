@@ -29,7 +29,6 @@ export const authOptions: NextAuthOptions = {
           credentials?.password!,
           user.hashedPassword
         );
-        console.log(isMatch);
         if (!isMatch) {
           return null;
         }

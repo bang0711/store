@@ -54,7 +54,6 @@ function RequestForm({ session }: Props) {
       reader.onloadend = () => {
         const base64Image = reader.result as string;
         setData({ ...data, companyImage: base64Image });
-        console.log(data.companyImage);
       };
     }
   };

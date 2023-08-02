@@ -19,7 +19,14 @@ export async function POST(req: Request) {
   const newUser = await prisma.user.create({
     data: {
       email: email,
-      image: "",
+      phoneNumber: "",
+      address: "",
+      userImages: {
+        create: {
+          imageUrl: "",
+          userEmail: email,
+        },
+      },
       username: username,
       role: "user",
       hashedPassword: hashPassword,

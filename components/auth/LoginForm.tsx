@@ -29,7 +29,7 @@ function LoginForm({}: Props) {
     }
     toast.success("Login successfully");
     setIsLoading(false);
-    router.push("/");
+    router.push("/dashboard");
   };
   return (
     <form

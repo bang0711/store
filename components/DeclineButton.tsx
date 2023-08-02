@@ -15,7 +15,7 @@ function DeclineButton({ request }: Props) {
       headers: {
         "Content-Type": "application/json",
       },
-      method: "POST",
+      method: "DELETE",
       body: JSON.stringify(request),
     });
 
@@ -48,7 +48,7 @@ function DeclineButton({ request }: Props) {
           />
         </svg>
       ) : (
-        "Approve"
+        "Decline"
       )}
     </button>
   );
