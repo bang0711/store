@@ -1,13 +1,14 @@
 "use client";
 import React, { useState } from "react";
 import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
 type Props = {
   request: any;
 };
 
 function ApproveButton({ request }: Props) {
-  console.log(request);
   const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
   const approve = async (e: any) => {
     e.preventDefault();
     setIsLoading(true);
@@ -25,6 +26,7 @@ function ApproveButton({ request }: Props) {
     }
     toast.success("Approved request");
     setIsLoading(false);
+    router.refresh();
   };
   return (
     <button className="bg-green-600 text-white submit-btn" onClick={approve}>

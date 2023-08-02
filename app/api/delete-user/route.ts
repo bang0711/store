@@ -6,11 +6,6 @@ export async function DELETE(req: Request) {
   const body = await req.json();
 
   const { email } = body;
-  const user = await prisma.user.findUnique({
-    where: {
-      email: email,
-    },
-  });
   await prisma.user.delete({
     where: {
       email: email,
@@ -19,7 +14,7 @@ export async function DELETE(req: Request) {
 
   await prisma.product.deleteMany({
     where: {
-      userId: user?.id,
+      shopEmail: email,
     },
   });
   return NextResponse.json("Done");

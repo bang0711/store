@@ -73,12 +73,21 @@ async function DashboardPage({}: Props) {
         </div>
       )}
 
-      <div className="div">
-        {user?.role !== "vendor" ? (
-          <RequestForm session={session} />
+      <div className="">
+        {user?.role !== "admin" ? (
+          <div className="div">
+            {user?.role !== "vendor" ? (
+              <RequestForm session={session} />
+            ) : (
+              <div>
+                <CreateForm session={session} />
+              </div>
+            )}
+          </div>
         ) : (
-          <div>
-            <CreateForm />
+          <div className="div flex-col gap-3">
+            <RequestForm session={session} />
+            <CreateForm session={session} />
           </div>
         )}
       </div>

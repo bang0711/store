@@ -25,6 +25,7 @@ export async function POST(req: Request) {
           productName: "",
           productPrice: "",
           productImage: "",
+          shopEmail: companyEmail,
         },
       },
     },

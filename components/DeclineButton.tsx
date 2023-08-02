@@ -1,12 +1,13 @@
 "use client";
 import React, { useState } from "react";
 import { toast } from "react-toastify";
-
+import { useRouter } from "next/navigation";
 type Props = {
   request: any;
 };
 
 function DeclineButton({ request }: Props) {
+  const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const decline = async (e: any) => {
     e.preventDefault();
@@ -27,6 +28,7 @@ function DeclineButton({ request }: Props) {
 
     toast.success("Successfully declined");
     setIsLoading(false);
+    router.refresh();
   };
   return (
     <button className="text-white bg-red-600 submit-btn" onClick={decline}>
