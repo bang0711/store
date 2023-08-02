@@ -9,12 +9,20 @@ export async function POST(req: Request) {
   }
   const request = await prisma.vendorRequest.findUnique({
     where: {
-      companyName: companyName,
       companyEmail: email,
     },
   });
   if (request) {
     return new NextResponse("Request already sent.", { status: 400 });
+  }
+  const name = await prisma.vendorRequest.findUnique({
+    where: {
+      companyName,
+    },
+  });
+
+  if (name) {
+    return new NextResponse("Name already taken", { status: 400 });
   }
 
   const newRequest = await prisma.vendorRequest.create({
@@ -22,7 +30,7 @@ export async function POST(req: Request) {
       companyEmail: email,
       companyImage: companyImage,
       companyName: companyName,
-      CompanyAddress: address,
+      companyAddress: address,
       companyPhoneNumber: phoneNumber,
     },
   });

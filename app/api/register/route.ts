@@ -21,12 +21,7 @@ export async function POST(req: Request) {
       email: email,
       phoneNumber: "",
       address: "",
-      userImages: {
-        create: {
-          imageUrl: "",
-          userEmail: email,
-        },
-      },
+      userImage: "",
       username: username,
       role: "user",
       hashedPassword: hashPassword,

@@ -42,6 +42,7 @@ model User {
   emailVerified  DateTime?
   image          String?
   role           String
+  companyName    String?         @unique
   hashedPassword String
   address        String?
   phoneNumber    String?
@@ -53,7 +54,7 @@ model User {
   products       Product[]
   activateTokens ActivateToken[]
   vendorrequests VendorRequest[]
-  userImages     UserImage[]
+  userImage      String?
 }
 
 model ActivateToken {
@@ -75,30 +76,14 @@ model VerificationToken {
 }
 
 model Product {
-  id            String         @id @default(cuid())
-  productName   String
-  productPrice  String
-  created_at    DateTime       @default(now())
-  upadted_at    DateTime       @updatedAt
-  productImages ProductImage[]
-  User          User?          @relation(fields: [userId], references: [id])
-  userId        String?
-}
-
-model ProductImage {
-  id        String   @id @default(cuid())
-  imageUrl  String
-  imageName String
-  Product   Product? @relation(fields: [productId], references: [id])
-  productId String?
-}
-
-model UserImage {
-  id        String  @id @default(cuid())
-  imageUrl  String
-  userEmail String  @unique
-  User      User?   @relation(fields: [userId], references: [id])
-  userId    String?
+  id           String   @id @default(cuid())
+  productName  String
+  productPrice String
+  created_at   DateTime @default(now())
+  upadted_at   DateTime @updatedAt
+  productImage String
+  User         User?    @relation(fields: [userId], references: [id])
+  userId       String?
 }
 
 model VendorRequest {
@@ -111,5 +96,5 @@ model VendorRequest {
   companyImage       String?
   companyEmail       String?  @unique
   companyPhoneNumber String?
-  CompanyAddress     String?
+  companyAddress     String?
 }

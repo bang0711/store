@@ -6,6 +6,7 @@ type Props = {
 };
 
 function ApproveButton({ request }: Props) {
+  console.log(request);
   const [isLoading, setIsLoading] = useState(false);
   const approve = async (e: any) => {
     e.preventDefault();

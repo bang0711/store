@@ -23,30 +23,28 @@ async function DashboardPage({}: Props) {
     select: {
       phoneNumber: true,
       username: true,
+      address: true,
       products: {
         select: {
           productName: true,
           productPrice: true,
-          productImages: true,
+          productImage: true,
         },
       },
-      userImages: {
-        select: {
-          imageUrl: true,
-        },
-      },
+      userImage: true,
       role: true,
+      companyName: true,
     },
   });
-
   return (
     <div className="p-3">
       <div className="text-center font-bold">{user?.role}</div>
-      <div className="flex items-center gap-3">
+      <div className="flex flex-col md:flex-row items-center gap-3">
         {user?.role === "admin" && <Link href={"/request"}>Request List</Link>}
+        {user?.role === "admin" && <Link href={"/user"}>User List</Link>}
         <Button />
       </div>
-      {user?.userImages[0].imageUrl === "" ? (
+      {user?.userImage === "" ? (
         <svg
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 24 24"
@@ -60,13 +58,19 @@ async function DashboardPage({}: Props) {
           />
         </svg>
       ) : (
-        <Image
-          alt={user!.username}
-          width={200}
-          height={200}
-          src={user!.userImages[0].imageUrl}
-          className="w-24 h-24 rounded-full mx-auto"
-        />
+        <div>
+          <Image
+            alt={user!.username}
+            width={200}
+            height={200}
+            src={user!.userImage as string}
+            className="w-24 h-24 rounded-full mx-auto"
+          />
+
+          {user?.role === "vendor" && (
+            <h1 className="title text-center">{user.companyName}</h1>
+          )}
+        </div>
       )}
 
       <div className="div">

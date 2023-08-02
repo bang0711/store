@@ -40,6 +40,13 @@ function RequestForm({ session }: Props) {
       return;
     }
     toast.success("Request Success");
+    setData({
+      address: "",
+      companyImage: "",
+      companyName: "",
+      email: "",
+      phoneNumber: "",
+    });
     setIsLoading(false);
     router.refresh();
   };
