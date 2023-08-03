@@ -4,11 +4,11 @@ import Image from "next/image";
 import { useSession } from "next-auth/react";
 type Props = {
   product: any;
-  currentUser: any;
-  email: string;
+  currentUser?: any;
+  email?: string;
 };
 
-function ProductCard({ product, currentUser, email }: Props) {
+function ProductCard({ product, email }: Props) {
   const { data } = useSession();
   return (
     <div className="flex flex-col gap-3 shadow-md rounded-lg border border-gray-200 items-center p-2">
@@ -23,7 +23,7 @@ function ProductCard({ product, currentUser, email }: Props) {
       <p>
         Price: <span className="font-medium">{product.productPrice}$</span>
       </p>
-      {data?.user?.email === email.replace("%40", "@") ? (
+      {data?.user?.email === email?.replace("%40", "@") ? (
         <div className="flex items-center justify-between gap-2">
           <button className="submit-btn bg-green-600 text-white">Edit</button>
           <button className="submit-btn bg-red-600 text-white">Delete</button>

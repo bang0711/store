@@ -25,6 +25,19 @@ export async function POST(req: Request) {
       username: username,
       role: "user",
       hashedPassword: hashPassword,
+      carts: {
+        create: {
+          products: {
+            create: {
+              category: "Technology",
+              productImage: "",
+              productName: "",
+              productPrice: "",
+              productQuantity: 0,
+            },
+          },
+        },
+      },
     },
   });
 

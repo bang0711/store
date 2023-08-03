@@ -3,7 +3,14 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 export async function POST(req: Request) {
   const body = await req.json();
-  const { email, productPrice, productName, productImage, category } = body;
+  const {
+    email,
+    productPrice,
+    productName,
+    productImage,
+    category,
+    productQuantity,
+  } = body;
   const user = await prisma.user.findUnique({
     where: {
       email: email,
@@ -24,6 +31,7 @@ export async function POST(req: Request) {
       productName: productName,
       productPrice: productPrice,
       userId: user?.id,
+      productQuantity: productQuantity,
     },
   });
   return NextResponse.json(newProduct);

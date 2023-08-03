@@ -65,6 +65,9 @@ async function ShopPage({ params: { email } }: Props) {
           )}
         </div>
       )}
+      <h1 className="title">
+        {products.length - 1} {products.length <= 1 ? "product" : "products"}
+      </h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 p-3">
         {products.slice(1, products.length).map((product) => (
           <ProductCard

@@ -20,12 +20,30 @@ export async function POST(req: Request) {
       phoneNumber: companyPhoneNumber,
       userImage: companyImage,
       companyName: companyName,
+      purchaseRequests: {
+        create: {
+          customerAddress: "",
+          customerEmail: "",
+          customerPhoneNumber: "",
+          customerUsername: "",
+          products: {
+            create: {
+              category: "Technology",
+              productImage: "",
+              productName: "",
+              productPrice: "",
+              productQuantity: 0,
+            },
+          },
+        },
+      },
       products: {
         create: {
           productName: "",
           productPrice: "",
           productImage: "",
           category: "Technology",
+          productQuantity: 0,
         },
       },
     },

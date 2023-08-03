@@ -36,25 +36,27 @@ model Session {
 }
 
 model User {
-  id             String          @id @default(cuid())
-  username       String
-  email          String?         @unique
-  emailVerified  DateTime?
-  image          String?
-  role           String
-  companyName    String?         @unique
-  hashedPassword String
-  address        String?
-  phoneNumber    String?
-  active         Boolean         @default(false)
-  crated_at      DateTime        @default(now())
-  updated_at     DateTime        @updatedAt
-  accounts       Account[]
-  sessions       Session[]
-  products       Product[]
-  activateTokens ActivateToken[]
-  vendorrequests VendorRequest[]
-  userImage      String?
+  id               String            @id @default(cuid())
+  username         String
+  email            String?           @unique
+  emailVerified    DateTime?
+  image            String?
+  role             String
+  companyName      String?           @unique
+  hashedPassword   String
+  address          String?
+  phoneNumber      String?
+  active           Boolean           @default(false)
+  crated_at        DateTime          @default(now())
+  updated_at       DateTime          @updatedAt
+  userImage        String?
+  accounts         Account[]
+  sessions         Session[]
+  products         Product[]
+  activateTokens   ActivateToken[]
+  vendorrequests   VendorRequest[]
+  purchaseRequests PurchaseRequest[]
+  carts            Cart[]
 }
 
 model ActivateToken {
@@ -75,16 +77,41 @@ model VerificationToken {
   @@unique([identifier, token])
 }
 
+model Cart {
+  id         String    @id @default(cuid())
+  created_at DateTime  @default(now())
+  updated_at DateTime  @updatedAt
+  products   Product[]
+  User       User?     @relation(fields: [userId], references: [id])
+  userId     String?
+}
+
+model PurchaseRequest {
+  id                  String    @id @default(cuid())
+  customerEmail       String
+  customerUsername    String
+  customerAddress     String
+  customerPhoneNumber String
+  products            Product[]
+  User                User?     @relation(fields: [userId], references: [id])
+  userId              String?
+}
+
 model Product {
-  id           String   @id @default(cuid())
-  productName  String
-  productPrice String
-  created_at   DateTime @default(now())
-  upadted_at   DateTime @updatedAt
-  productImage String
-  User         User?    @relation(fields: [userId], references: [id])
-  userId       String?
-  category     Category
+  id                String           @id @default(cuid())
+  productName       String
+  productPrice      String
+  productQuantity   Int
+  created_at        DateTime         @default(now())
+  upadted_at        DateTime         @updatedAt
+  productImage      String
+  User              User?            @relation(fields: [userId], references: [id])
+  userId            String?
+  category          Category
+  Cart              Cart?            @relation(fields: [cartId], references: [id])
+  cartId            String?
+  PurchaseRequest   PurchaseRequest? @relation(fields: [purchaseRequestId], references: [id])
+  purchaseRequestId String?
 }
 
 enum Category {

@@ -15,6 +15,7 @@ function CreateForm({ session }: Props) {
     productName: "",
     productImage: "",
     category: "",
+    productQuantity: 0,
   });
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
@@ -47,6 +48,7 @@ function CreateForm({ session }: Props) {
       productPrice: "",
       email: session?.user?.email,
       category: "",
+      productQuantity: 0,
     });
     setIsLoading(false);
     router.refresh();
@@ -88,7 +90,7 @@ function CreateForm({ session }: Props) {
           src={data.productImage}
           width={300}
           height={300}
-          className="w-40 h-40 rounded-full"
+          className="w-40 h-40 "
         />
       )}
       <div>
@@ -108,9 +110,22 @@ function CreateForm({ session }: Props) {
           type="text"
           name="price"
           id="price"
-          placeholder="Enter your company price"
+          placeholder="Enter your product price"
           value={data.productPrice}
           onChange={(e) => setData({ ...data, productPrice: e.target.value })}
+        />
+      </div>
+      <div>
+        <label htmlFor="quantity">Product quantity</label>
+        <input
+          type="number"
+          name="quantity"
+          id="quantity"
+          placeholder="Enter your product quantity"
+          value={data.productQuantity}
+          onChange={(e) =>
+            setData({ ...data, productQuantity: e.target.valueAsNumber })
+          }
         />
       </div>
       <select

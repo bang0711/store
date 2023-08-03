@@ -16,6 +16,7 @@ async function DashboardPage({}: Props) {
   if (!session) {
     redirect("/");
   }
+  const requestList = await prisma.vendorRequest.findMany();
   const user = await prisma.user.findUnique({
     where: {
       email: session.user?.email as string,
@@ -34,14 +35,36 @@ async function DashboardPage({}: Props) {
       userImage: true,
       role: true,
       companyName: true,
+      email: true,
+      purchaseRequests: true,
+      id: true,
     },
   });
+  await prisma.$disconnect();
   return (
     <div className="p-3">
       <div className="text-center font-bold">{user?.role}</div>
       <div className="flex flex-col md:flex-row items-center gap-3">
-        {user?.role === "admin" && <Link href={"/request"}>Request List</Link>}
+        {user?.role === "admin" && (
+          <Link href={"/request"}>Request List ({requestList.length})</Link>
+        )}
         {user?.role === "admin" && <Link href={"/user"}>User List</Link>}
+        {user?.role === "admin" && (
+          <Link href={`/purchaseRequest/${user?.email}`}>
+            Purchase Requests
+          </Link>
+        )}
+        {user?.role === "vendor" && (
+          <Link href={`/purchaseRequest/${user?.email}`} className="relative">
+            Purchase Requests
+            <span className="">({user?.purchaseRequests.length - 1})</span>
+          </Link>
+        )}
+        {user?.role === "vendor" && (
+          <Link href={`/shop/${user?.email}`} className="relative">
+            My Shop
+          </Link>
+        )}
         <Button />
       </div>
       {user?.userImage === "" ? (
