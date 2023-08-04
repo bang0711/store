@@ -17,6 +17,7 @@ async function DashboardPage({}: Props) {
   }
   const requestList = await prisma.vendorRequest.findMany();
   const userList = await prisma.user.findMany();
+
   const user = await prisma.user.findUnique({
     where: {
       email: session.user?.email as string,
@@ -41,6 +42,11 @@ async function DashboardPage({}: Props) {
       },
       id: true,
       currentOrder: true,
+    },
+  });
+  const products = await prisma.product.findMany({
+    where: {
+      userId: user?.id,
     },
   });
   return (
@@ -70,7 +76,7 @@ async function DashboardPage({}: Props) {
         )}
         {user?.role === "vendor" && (
           <Link href={`/shop/${user?.email}`} className=" link">
-            My Shop ({user.products.length - 1})
+            My Shop ({products.length - 2})
           </Link>
         )}
       </div>
