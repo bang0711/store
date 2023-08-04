@@ -1,4 +1,4 @@
-import React from "react";
+import React, { use } from "react";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../api/auth/[...nextauth]/route";
 import { redirect } from "next/navigation";
@@ -6,7 +6,6 @@ import { PrismaClient } from "@prisma/client";
 import UpdateForm from "@/components/dashboard/UpdateForm";
 import CreateForm from "@/components/dashboard/CreateForm";
 import RequestForm from "@/components/dashboard/RequestForm";
-import Button from "@/components/Button";
 import Link from "next/link";
 import Image from "next/image";
 type Props = {};
@@ -17,14 +16,13 @@ async function DashboardPage({}: Props) {
     redirect("/");
   }
   const requestList = await prisma.vendorRequest.findMany();
+  const userList = await prisma.user.findMany();
   const user = await prisma.user.findUnique({
     where: {
       email: session.user?.email as string,
     },
     select: {
-      phoneNumber: true,
       username: true,
-      address: true,
       products: {
         select: {
           productName: true,
@@ -32,42 +30,51 @@ async function DashboardPage({}: Props) {
           productImage: true,
         },
       },
-      userImage: true,
+      image: true,
       role: true,
       companyName: true,
       email: true,
-      purchaseRequests: true,
+      purchaseRequests: {
+        select: {
+          products: true,
+        },
+      },
       id: true,
+      currentOrder: true,
     },
   });
-  await prisma.$disconnect();
   return (
     <div className="p-3">
       <div className="text-center font-bold">{user?.role}</div>
       <div className="flex flex-col md:flex-row items-center gap-3">
         {user?.role === "admin" && (
-          <Link href={"/request"}>Request List ({requestList.length})</Link>
+          <Link href={"/request"} className="link">
+            Request List ({requestList.length})
+          </Link>
         )}
-        {user?.role === "admin" && <Link href={"/user"}>User List</Link>}
         {user?.role === "admin" && (
-          <Link href={`/purchaseRequest/${user?.email}`}>
+          <Link href={"/user"} className="link">
+            User List ({userList.length})
+          </Link>
+        )}
+        {user?.role === "admin" && (
+          <Link href={`/purchaseRequest/${user?.email}`} className="link">
             Purchase Requests
           </Link>
         )}
         {user?.role === "vendor" && (
-          <Link href={`/purchaseRequest/${user?.email}`} className="relative">
+          <Link href={`/purchaseRequest/${user?.email}`} className=" link">
             Purchase Requests
             <span className="">({user?.purchaseRequests.length - 1})</span>
           </Link>
         )}
         {user?.role === "vendor" && (
-          <Link href={`/shop/${user?.email}`} className="relative">
-            My Shop
+          <Link href={`/shop/${user?.email}`} className=" link">
+            My Shop ({user.products.length - 1})
           </Link>
         )}
-        <Button />
       </div>
-      {user?.userImage === "" ? (
+      {user?.image === "" ? (
         <svg
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 24 24"
@@ -86,7 +93,7 @@ async function DashboardPage({}: Props) {
             alt={user!.username}
             width={200}
             height={200}
-            src={user!.userImage as string}
+            src={user!.image as string}
             className="w-24 h-24 rounded-full mx-auto"
           />
 
@@ -99,14 +106,14 @@ async function DashboardPage({}: Props) {
       {user?.role !== "admin" ? (
         <div className="div">
           {user?.role !== "vendor" ? (
-            <RequestForm session={session} />
+            <RequestForm user={user} session={session} />
           ) : (
             <CreateForm session={session} />
           )}
         </div>
       ) : (
         <div className="div flex-col gap-3">
-          <RequestForm session={session} />
+          <RequestForm user={user} session={session} />
           <CreateForm session={session} />
         </div>
       )}

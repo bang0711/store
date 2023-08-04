@@ -3,7 +3,8 @@ import { NextResponse } from "next/server";
 const prisma = new PrismaClient();
 export async function POST(req: Request) {
   const body = await req.json();
-  const { companyName, address, phoneNumber, companyImage, email } = body;
+  const { companyName, address, phoneNumber, companyImage, email, userId } =
+    body;
   if (!companyName || !address || !phoneNumber || !companyImage || !email) {
     return new NextResponse("Missing required fields.", { status: 400 });
   }
@@ -32,6 +33,7 @@ export async function POST(req: Request) {
       companyName: companyName,
       companyAddress: address,
       companyPhoneNumber: phoneNumber,
+      userId: userId,
     },
   });
   return NextResponse.json(newRequest);

@@ -19,6 +19,7 @@ export async function POST(req: Request) {
   const product = await prisma.product.findFirst({
     where: {
       productName: productName,
+      userId: user?.id,
     },
   });
   if (product) {

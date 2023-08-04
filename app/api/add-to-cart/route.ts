@@ -4,6 +4,8 @@ import { NextResponse } from "next/server";
 import { authOptions } from "../auth/[...nextauth]/route";
 const prima = new PrismaClient();
 export async function POST(req: Request) {
+  const body = await req.json();
+  const { userId } = body;
   const session = await getServerSession(authOptions);
   const user = await prima.user.findUnique({
     where: {

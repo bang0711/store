@@ -19,7 +19,7 @@
   input {
     @apply p-3 rounded-lg border border-gray-200 focus-within:shadow-md transition-all duration-300 outline-none;
   }
-  a {
+  .link {
     @apply shadow-md rounded-lg py-1 px-3 text-black;
   }
   button {

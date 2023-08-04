@@ -6,15 +6,17 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 type Props = {
   session: any;
+  user: any;
 };
 
-function RequestForm({ session }: Props) {
+function RequestForm({ session, user }: Props) {
   const [data, setData] = useState({
     email: session?.user?.email,
     companyName: "",
     address: "",
     phoneNumber: "",
     companyImage: "",
+    userId: user.id,
   });
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
@@ -46,6 +48,7 @@ function RequestForm({ session }: Props) {
       companyName: "",
       email: "",
       phoneNumber: "",
+      userId: "",
     });
     setIsLoading(false);
     router.refresh();

@@ -21,7 +21,7 @@ async function ShopPage({ params: { email } }: Props) {
       id: true,
       role: true,
       username: true,
-      userImage: true,
+      image: true,
     },
   });
   if (!currentUser) {
@@ -34,7 +34,7 @@ async function ShopPage({ params: { email } }: Props) {
   });
   return (
     <div>
-      {currentUser?.userImage === "" ? (
+      {currentUser?.image === "" ? (
         <div>
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -56,7 +56,7 @@ async function ShopPage({ params: { email } }: Props) {
             alt={currentUser?.username as string}
             width={200}
             height={200}
-            src={currentUser?.userImage as string}
+            src={currentUser?.image as string}
             className="w-24 h-24 rounded-full mx-auto"
           />
 
@@ -69,14 +69,16 @@ async function ShopPage({ params: { email } }: Props) {
         {products.length - 1} {products.length <= 1 ? "product" : "products"}
       </h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 p-3">
-        {products.slice(1, products.length).map((product) => (
-          <ProductCard
-            email={email}
-            key={product.id}
-            product={product}
-            currentUser={currentUser}
-          />
-        ))}
+        {products
+          .filter((product) => product.productName !== "")
+          .map((product) => (
+            <ProductCard
+              email={email}
+              key={product.id}
+              product={product}
+              currentUser={currentUser}
+            />
+          ))}
       </div>
     </div>
   );

@@ -11,7 +11,74 @@ export async function DELETE(req: Request) {
       email: email,
     },
   });
+  const currentOrder = await prisma.currentOrder.findUnique({
+    where: {
+      userId: user?.id,
+    },
+  });
+  const orders = await prisma.order.findMany({
+    where: {
+      userId: user?.id,
+    },
+    select: {
+      id: true,
+    },
+  });
+
+  const purchaseRequests = await prisma.purchaseRequest.findMany({
+    where: {
+      userId: user?.id,
+    },
+    select: {
+      id: true,
+    },
+  });
+  const orderIds = orders.map((order) => order.id);
+  const purchaseRequestIds = purchaseRequests.map((request) => request.id);
+  await prisma.order.deleteMany({
+    where: {
+      userId: user?.id,
+    },
+  });
+  await prisma.currentOrder.delete({
+    where: {
+      userId: user?.id,
+    },
+    include: {
+      products: true,
+    },
+  });
+  await prisma.order.deleteMany({
+    where: {
+      userId: user?.id,
+    },
+  });
   await prisma.product.deleteMany({
+    where: {
+      orderId: {
+        in: orderIds,
+      },
+    },
+  });
+  await prisma.product.deleteMany({
+    where: {
+      userId: user?.id,
+    },
+  });
+
+  await prisma.product.deleteMany({
+    where: {
+      currentOrderId: currentOrder?.id,
+    },
+  });
+  await prisma.product.deleteMany({
+    where: {
+      purchaseRequestId: {
+        in: purchaseRequestIds,
+      },
+    },
+  });
+  await prisma.purchaseRequest.deleteMany({
     where: {
       userId: user?.id,
     },
@@ -22,5 +89,5 @@ export async function DELETE(req: Request) {
     },
   });
 
-  return NextResponse.json("Done");
+  return NextResponse.json("Done", { status: 200 });
 }

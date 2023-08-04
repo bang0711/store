@@ -39,7 +39,7 @@ function UserCard({ user }: Props) {
       href={`/shop/${user.email}`}
       className="flex flex-col shadow-md border border-gray-200 p-3 rounded-lg gap-1 font-semibold items-center"
     >
-      {user?.userImage === "" ? (
+      {user?.image === "" ? (
         <div className="flex flex-col gap-3 items-center">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -61,7 +61,7 @@ function UserCard({ user }: Props) {
             alt={user!.username}
             width={200}
             height={200}
-            src={user!.userImage as string}
+            src={user!.image as string}
             className="w-24 h-24 rounded-full"
           />
 

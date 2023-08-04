@@ -9,7 +9,9 @@ export async function POST(req: Request) {
     companyAddress,
     companyPhoneNumber,
     companyName,
+    userId,
   } = body;
+  console.log(userId);
   const newUser = await prisma.user.update({
     where: {
       email: companyEmail,
@@ -18,7 +20,7 @@ export async function POST(req: Request) {
       role: "vendor",
       address: companyAddress,
       phoneNumber: companyPhoneNumber,
-      userImage: companyImage,
+      image: companyImage,
       companyName: companyName,
       purchaseRequests: {
         create: {
@@ -33,6 +35,7 @@ export async function POST(req: Request) {
               productName: "",
               productPrice: "",
               productQuantity: 0,
+              userId: userId,
             },
           },
         },
@@ -44,6 +47,14 @@ export async function POST(req: Request) {
           productImage: "",
           category: "Technology",
           productQuantity: 0,
+        },
+      },
+    },
+    include: {
+      products: true,
+      purchaseRequests: {
+        include: {
+          products: true,
         },
       },
     },

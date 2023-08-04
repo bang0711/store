@@ -26,7 +26,7 @@ async function UserPage({}: Props) {
     select: {
       phoneNumber: true,
       address: true,
-      userImage: true,
+      image: true,
       email: true,
       username: true,
       role: true,
