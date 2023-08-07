@@ -1,41 +1,35 @@
-"use client";
 import React from "react";
-import { useState } from "react";
-import { toast } from "react-toastify";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
+import bcrypt from "bcrypt";
+import { prisma } from "@/app/db";
 type Props = {};
 function RegisterForm({}: Props) {
-  const [data, setData] = useState({
-    email: "",
-    username: "",
-    password: "",
-  });
-
-  const [isLoading, setIsLoading] = useState(false);
-  const router = useRouter();
-  const handleSubmit = async (e: any) => {
-    e.preventDefault();
-    setIsLoading(true);
-    const res = await fetch("/api/register", {
-      headers: {
-        "Content-Type": "application/json",
+  async function register(data: FormData) {
+    "use server";
+    console.log(data);
+    const email = data.get("email");
+    const password = data.get("password");
+    const username = data.get("username");
+    const user = await prisma.user.findUnique({
+      where: {
+        email: email as string,
       },
-      method: "POST",
-      body: JSON.stringify(data),
     });
-    if (!res.ok) {
-      toast.error("Fail to register.");
-      setIsLoading(false);
-      return;
+    if (user) {
+      throw new Error("User already exist");
     }
-
-    toast.success("Register successfully.");
-    setIsLoading(false);
-    router.push("/login");
-  };
+    const hashedPassword = await bcrypt.hash(password as string, 15);
+    await prisma.user.create({
+      data: {
+        hashedPassword: hashedPassword,
+        role: "user",
+        username: username as string,
+        email: email as string,
+      },
+    });
+  }
   return (
-    <form onSubmit={handleSubmit} className="form">
+    <form action={register} className="form">
       <h1 className="title">Register</h1>
       <div>
         <label htmlFor="email">Email</label>
@@ -43,8 +37,6 @@ function RegisterForm({}: Props) {
           type="email"
           name="email"
           id="email"
-          value={data.email}
-          onChange={(e) => setData({ ...data, email: e.target.value })}
           placeholder="Enter your email "
         />
       </div>
@@ -54,8 +46,6 @@ function RegisterForm({}: Props) {
           type="text"
           name="username"
           id="username"
-          value={data.username}
-          onChange={(e) => setData({ ...data, username: e.target.value })}
           placeholder="Enter your username"
         />
       </div>
@@ -65,36 +55,11 @@ function RegisterForm({}: Props) {
           type="password"
           name="password"
           id="password"
-          value={data.password}
-          onChange={(e) => setData({ ...data, password: e.target.value })}
           placeholder="Enter your password"
         />
       </div>
-      <button
-        type="submit"
-        className="submit-btn"
-        disabled={isLoading || !data.email || !data.password || !data.username}
-      >
-        {isLoading ? (
-          <svg
-            aria-hidden="true"
-            className="w-7 h-7 text-white animate-spin fill-black"
-            viewBox="0 0 100 101"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
-              fill="currentColor"
-            />
-            <path
-              d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
-              fill="currentFill"
-            />
-          </svg>
-        ) : (
-          "Register"
-        )}
+      <button type="submit" className="submit-btn">
+        Register
       </button>
       <p className="flex items-center justify-center">
         Already have an account?{" "}
